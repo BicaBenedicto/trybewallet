@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import WalletEditInfo from './WalletEdit/WalletEditInfo';
 
 class Wallet extends React.Component {
   constructor() {
@@ -10,6 +11,17 @@ class Wallet extends React.Component {
       currency: 'BRL',
       value: 0,
     };
+
+    this.checkActualValue = this.checkActualValue.bind(this);
+  }
+
+  checkActualValue() {
+    const { currencies } = this.props;
+    if (currencies.length !== 0) {
+      this.setState({
+        value: currencies.reduce((acc, { value }) => acc + Number(value)),
+      });
+    }
   }
 
   render() {
@@ -25,6 +37,7 @@ class Wallet extends React.Component {
             {email}
           </h3>
         </header>
+        <WalletEditInfo checkActualValue={ this.checkActualValue } />
         <div>
           <div>
             <span>Valor:</span>
@@ -42,10 +55,12 @@ class Wallet extends React.Component {
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
+  currencies: state.wallet.currencies,
 });
 
 Wallet.propTypes = {
   email: PropTypes.string.isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default connect(mapStateToProps)(Wallet);

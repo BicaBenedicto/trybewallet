@@ -1,10 +1,16 @@
 // Coloque aqui suas actions
 const LOGIN_EMAIL = 'LOGIN_EMAIL';
+const ADD_WALLET_ITEM = 'ADD_WALLET_ITEM';
 
-const loginEnter = (value) => (
+export const loginEnter = (value) => (
   {
     type: LOGIN_EMAIL,
     value,
   });
 
-export default loginEnter;
+export const addWalletItem = (item) => (
+  {
+    type: ADD_WALLET_ITEM,
+    item,
+  }
+);
