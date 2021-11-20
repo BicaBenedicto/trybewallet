@@ -13,6 +13,15 @@ class Wallet extends React.Component {
     };
 
     this.checkActualValue = this.checkActualValue.bind(this);
+    this.getCurrencyTypes = this.getCurrencyTypes.bind(this);
+  }
+
+  getCurrencyTypes() {
+    const { currencies } = this.props;
+    return currencies.filter((currency) => currency !== 'USDT').map((currency, index) => (
+      <option key={ index } value={ currency } data-testid={ currency }>
+        {currency}
+      </option>));
   }
 
   checkActualValue() {
@@ -47,8 +56,16 @@ class Wallet extends React.Component {
             <span data-testid="total-field">{value}</span>
           </div>
           <div>
-            <span>Cambio:</span>
-            <span data-testid="header-currency-field">{currency}</span>
+            <label htmlFor="currency-convert">
+              Moeda:
+              <select
+                id="currency-convert"
+                data-testid="header-currency-field"
+                value={ currency }
+              >
+                { this.getCurrencyTypes() }
+              </select>
+            </label>
           </div>
         </div>
       </section>
@@ -59,11 +76,13 @@ class Wallet extends React.Component {
 const mapStateToProps = (state) => ({
   email: state.user.email,
   expenses: state.wallet.expenses,
+  currencies: state.wallet.currencies,
 });
 
 Wallet.propTypes = {
   email: PropTypes.string.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default connect(mapStateToProps)(Wallet);
