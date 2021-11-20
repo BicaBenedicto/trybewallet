@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addWalletItem } from '../../actions';
+import { addWalletItem, addCurrencies } from '../../actions';
 import CurrencyInput from './CurrencyInput';
 import DescriptionInput from './DescriptionInput';
 import MethodInput from './MethodInput';
@@ -15,9 +15,9 @@ class WalletEditInfo extends React.Component {
 
     this.state = {
       id: 0,
-      value: 0,
+      value: '0',
       description: '',
-      currency: '',
+      currency: 'USD',
       method: 'Dinheiro',
       tag: 'Lazer',
       exchangeRates: {},
@@ -27,6 +27,13 @@ class WalletEditInfo extends React.Component {
     this.onButtonClick = this.onButtonClick.bind(this);
     this.saveWalletItemInStore = this.saveWalletItemInStore.bind(this);
     this.verifyExchangeRates = this.verifyExchangeRates.bind(this);
+    this.getInitialState = this.getInitialState.bind(this);
+  }
+
+  getInitialState() {
+    this.setState({
+      value: '0',
+    });
   }
 
   componentDidMount() {
@@ -41,12 +48,13 @@ class WalletEditInfo extends React.Component {
   }
 
   onButtonClick(e) {
+    this.getInitialState();
     e.preventDefault();
     this.verifyExchangeRates();
-    const { currencies, checkActualValue } = this.props;
+    const { expenses, checkActualValue } = this.props;
     checkActualValue();
-    if (currencies.length !== 0) {
-      const idList = currencies.map((currencie) => currencie.id);
+    if (expenses.length !== 0) {
+      const idList = expenses.map((expense) => expense.id);
       const biggerId = Math.max(...idList);
       this.setState({
         id: biggerId + 1,
@@ -62,10 +70,13 @@ class WalletEditInfo extends React.Component {
   }
 
   async verifyExchangeRates() {
-    const rates = await fetchAPI();
+    const { saveCurrencies } = this.props;
+    const response = await fetchAPI();
     this.setState({
-      exchangeRates: rates,
+      exchangeRates: response,
     });
+    const currenciesType = response;
+    saveCurrencies(currenciesType);
   }
 
   render() {
@@ -100,15 +111,17 @@ class WalletEditInfo extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   saveWalletItem: (item) => dispatch(addWalletItem(item)),
+  saveCurrencies: (items) => dispatch(addCurrencies(items)),
 });
 
 const mapStateToProps = (state) => ({
-  currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
 });
 
 WalletEditInfo.propTypes = {
   saveWalletItem: PropTypes.func.isRequired,
-  currencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+  saveCurrencies: PropTypes.func.isRequired,
   checkActualValue: PropTypes.func.isRequired,
 };
 

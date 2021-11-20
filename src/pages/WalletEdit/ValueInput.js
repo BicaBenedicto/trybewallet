@@ -21,12 +21,8 @@ class ValueInput extends React.Component {
 }
 
 ValueInput.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,
-};
-
-ValueInput.defaultProps = {
-  value: '0',
 };
 
 export default ValueInput;

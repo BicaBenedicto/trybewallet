@@ -1,6 +1,7 @@
 // Coloque aqui suas actions
 const LOGIN_EMAIL = 'LOGIN_EMAIL';
 const ADD_WALLET_ITEM = 'ADD_WALLET_ITEM';
+const ADD_CURRENCIES = 'ADD_CURRENCIES';
 
 export const loginEnter = (value) => (
   {
@@ -8,9 +9,16 @@ export const loginEnter = (value) => (
     value,
   });
 
-export const addWalletItem = (item) => (
+export const addWalletItem = (expense) => (
   {
     type: ADD_WALLET_ITEM,
-    item,
+    expense,
+  }
+);
+
+export const addCurrencies = (items) => (
+  {
+    type: ADD_CURRENCIES,
+    items,
   }
 );

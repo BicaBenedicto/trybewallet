@@ -16,12 +16,11 @@ class Wallet extends React.Component {
   }
 
   checkActualValue() {
-    const { currencies } = this.props;
-    if (currencies.length !== 0) {
-      this.setState({
-        value: currencies.reduce((acc, { value }) => acc + Number(value)),
-      });
-    }
+    const { expenses } = this.props;
+    this.setState({
+      value: ((expenses.length !== 0) ? expenses
+        .reduce((acc, expense) => acc.value + expense.value).value : 0),
+    });
   }
 
   render() {
@@ -55,12 +54,12 @@ class Wallet extends React.Component {
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
-  currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
 });
 
 Wallet.propTypes = {
   email: PropTypes.string.isRequired,
-  currencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default connect(mapStateToProps)(Wallet);
