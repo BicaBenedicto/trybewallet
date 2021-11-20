@@ -11,17 +11,18 @@ class CurrencyInput extends React.Component {
 
   getCurrencyTypes() {
     const { currencies } = this.props;
-    return currencies.map((currency, index) => (
-      <option key={ index } value={ currency }>
-        {currency}
-      </option>));
+    return currencies.filter((currency) => currency !== 'USDT')
+      .map((currency, index) => (
+        <option key={ index } value={ currency }>
+          {currency}
+        </option>));
   }
 
   render() {
     const { currency, onInputChange } = this.props;
     return (
       <label htmlFor="currency-input">
-        Cambio:
+        Moeda:
         <select
           id="currency-input"
           data-testid="currency-input"

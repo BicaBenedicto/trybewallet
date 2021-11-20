@@ -60,7 +60,7 @@ class Wallet extends React.Component {
           </div>
           <div>
             <label htmlFor="currency-convert">
-              Moeda:
+              Cambio:
               <select
                 id="currency-convert"
                 data-testid="header-currency-field"

@@ -11,8 +11,17 @@ class ExpensesTable extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      expenses: [],
+    };
+
     this.getItemTable = this.getItemTable.bind(this);
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
+    this.getExpensesForState = this.getExpensesForState.bind(this);
+  }
+
+  componentDidMount() {
+    this.getExpensesForState();
   }
 
   onDeleteButtonClick(e) {
@@ -20,7 +29,15 @@ class ExpensesTable extends React.Component {
     const { name } = e.target;
     const { removeItem, checkActualValue } = this.props;
     removeItem(name);
+    this.getExpensesForState();
     checkActualValue();
+  }
+
+  getExpensesForState() {
+    const { expenses } = this.props;
+    this.setState({
+      expenses,
+    });
   }
 
   getTitleTable() {
@@ -32,7 +49,8 @@ class ExpensesTable extends React.Component {
   }
 
   getItemTable() {
-    const { expenses, currency } = this.props;
+    const { currency } = this.props;
+    const { expenses } = this.state;
     const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
       <tr key={ expense.id } name={ expense.id }>
