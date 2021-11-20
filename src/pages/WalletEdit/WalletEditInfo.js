@@ -47,12 +47,10 @@ class WalletEditInfo extends React.Component {
     });
   }
 
-  onButtonClick(e) {
-    this.getInitialState();
+  async onButtonClick(e) {
     e.preventDefault();
-    this.verifyExchangeRates();
     const { expenses, checkActualValue } = this.props;
-    checkActualValue();
+    await this.verifyExchangeRates();
     if (expenses.length !== 0) {
       const idList = expenses.map((expense) => expense.id);
       const biggerId = Math.max(...idList);
@@ -62,6 +60,8 @@ class WalletEditInfo extends React.Component {
     } else {
       this.saveWalletItemInStore();
     }
+    await checkActualValue();
+    await this.getInitialState();
   }
 
   saveWalletItemInStore() {

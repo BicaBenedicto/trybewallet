@@ -17,9 +17,13 @@ class Wallet extends React.Component {
 
   checkActualValue() {
     const { expenses } = this.props;
+    const sumValue = ((expenses.length !== 0) ? expenses
+      .map(({ value, currency, exchangeRates }) => (
+        Number(value * (exchangeRates[currency].ask))
+      )) : 0).reduce((acc, value) => acc + value);
+
     this.setState({
-      value: ((expenses.length !== 0) ? expenses
-        .reduce((acc, expense) => acc.value + expense.value).value : 0),
+      value: sumValue,
     });
   }
 
