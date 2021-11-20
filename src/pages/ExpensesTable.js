@@ -22,7 +22,8 @@ class ExpensesTable extends React.Component {
   }
 
   getItemTable() {
-    const { expenses } = this.props;
+    const { expenses, currency } = this.props;
+    const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
       <tr key={ expense.id }>
         <td>
@@ -38,16 +39,19 @@ class ExpensesTable extends React.Component {
           { expense.value }
         </td>
         <td>
-          { expense.currency }
+          { (expense.currency === 'USD' ? 'Dólar Comercial'
+            : expense.exchangeRates[expense.currency].name.split('/')[0]) }
         </td>
         <td>
-          { expense.askCurrency }
+          { Number(expense.exchangeRates[expense.currency].ask).toFixed(DECIMAL_NUMBER) }
         </td>
         <td>
-          { expense.valueCoverted }
+          { Number(expense.exchangeRates[expense.currency].ask * expense.value)
+            .toFixed(DECIMAL_NUMBER) }
         </td>
         <td>
-          { expense.currencyCoverted }
+          { (currency === 'BRL' ? 'Real'
+            : expense.exchangeRates[currency].name.split('/')[0]) }
         </td>
         <td>
           <button type="button">Editar</button>
@@ -73,6 +77,7 @@ const mapStateToProps = (state) => ({
 
 ExpensesTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
+  currency: PropTypes.string.isRequired,
 };
 
 ExpensesTable.defaultProps = {
