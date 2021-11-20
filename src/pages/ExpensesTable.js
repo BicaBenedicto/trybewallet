@@ -11,33 +11,24 @@ class ExpensesTable extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      expenses: [],
-    };
-
     this.getItemTable = this.getItemTable.bind(this);
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
-    this.getExpensesForState = this.getExpensesForState.bind(this);
   }
 
   componentDidMount() {
-    this.getExpensesForState();
-  }
-
-  onDeleteButtonClick(e) {
-    e.preventDefault();
-    const { name } = e.target;
-    const { removeItem, checkActualValue } = this.props;
-    removeItem(name);
-    this.getExpensesForState();
+    const { checkActualValue } = this.props;
     checkActualValue();
   }
 
-  getExpensesForState() {
-    const { expenses } = this.props;
-    this.setState({
-      expenses,
-    });
+  async onDeleteButtonClick(e) {
+    e.preventDefault();
+    const { name } = e.target;
+    const { removeItem, expenses, checkActualValue } = this.props;
+    console.log(expenses);
+    const newExpenses = expenses.filter(({ id }) => id !== Number(name));
+    console.log(newExpenses);
+    await removeItem(newExpenses);
+    checkActualValue();
   }
 
   getTitleTable() {
@@ -49,11 +40,10 @@ class ExpensesTable extends React.Component {
   }
 
   getItemTable() {
-    const { currency } = this.props;
-    const { expenses } = this.state;
+    const { expenses, currency } = this.props;
     const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
-      <tr key={ expense.id } name={ expense.id }>
+      <tr key={ expense.id }>
         <td>
           { expense.description }
         </td>

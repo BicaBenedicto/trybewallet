@@ -31,10 +31,10 @@ class Wallet extends React.Component {
     const sumValue = ((expenses.length !== 0) ? expenses
       .map(({ value, currency, exchangeRates }) => (
         Number(value * (exchangeRates[currency].ask))
-      )) : 0).reduce((acc, value) => acc + value);
+      )) : 0);
 
     await this.setState({
-      value: sumValue,
+      value: (sumValue === 0 ? 0 : sumValue.reduce((acc, value) => acc + value)),
     });
   }
 
