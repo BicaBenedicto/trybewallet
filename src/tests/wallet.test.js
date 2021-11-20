@@ -234,7 +234,7 @@ describe('6 - Desenvolva uma tabela com os gastos contendo as seguintes caracter
   });
 });
 
-describe.only('7 - Implemente a lógica para que a tabela seja alimentada pelo estado da aplicação', () => {
+describe('7 - Implemente a lógica para que a tabela seja alimentada pelo estado da aplicação', () => {
   const initial = initialStateWithExpenses;
   test('A tabela deve ser alimentada pelo estado da aplicação, que estará disponível na chave expenses que vem do reducer wallet.', () => {
     renderWithRouterAndStore(<Wallet />, '/carteira', initial);

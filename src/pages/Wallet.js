@@ -19,20 +19,21 @@ class Wallet extends React.Component {
 
   getCurrencyTypes() {
     const { currencies } = this.props;
-    return currencies.filter((currency) => currency !== 'USDT').map((currency, index) => (
-      <option key={ index } value={ currency } data-testid={ currency }>
-        {currency}
-      </option>));
+    return currencies.filter((currency) => currency !== 'USDT')
+      .concat('BRL').map((currency, index) => (
+        <option key={ index } value={ currency } data-testid={ currency }>
+          {currency}
+        </option>));
   }
 
-  checkActualValue() {
+  async checkActualValue() {
     const { expenses } = this.props;
     const sumValue = ((expenses.length !== 0) ? expenses
       .map(({ value, currency, exchangeRates }) => (
         Number(value * (exchangeRates[currency].ask))
       )) : 0).reduce((acc, value) => acc + value);
 
-    this.setState({
+    await this.setState({
       value: sumValue,
     });
   }
@@ -40,6 +41,7 @@ class Wallet extends React.Component {
   render() {
     const { email } = this.props;
     const { currency, value } = this.state;
+    const DECIMAL_NUMBER = 2;
     return (
       <section>
         <header>
@@ -54,7 +56,7 @@ class Wallet extends React.Component {
         <div>
           <div>
             <span>Valor:</span>
-            <span data-testid="total-field">{value}</span>
+            <span data-testid="total-field">{value.toFixed(DECIMAL_NUMBER)}</span>
           </div>
           <div>
             <label htmlFor="currency-convert">
@@ -69,7 +71,7 @@ class Wallet extends React.Component {
             </label>
           </div>
         </div>
-        <ExpensesTable currency={ currency } />
+        <ExpensesTable currency={ currency } checkActualValue={ this.checkActualValue } />
       </section>
     );
   }

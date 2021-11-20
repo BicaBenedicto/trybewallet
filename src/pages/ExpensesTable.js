@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { delWalletItem } from '../actions';
 
 const INFO_TABLE = ['Descrição', 'Tag', 'Método de pagamento', 'Valor',
   'Moeda', 'Câmbio utilizado', 'Valor convertido', 'Moeda de conversão',
@@ -11,6 +12,15 @@ class ExpensesTable extends React.Component {
     super();
 
     this.getItemTable = this.getItemTable.bind(this);
+    this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
+  }
+
+  onDeleteButtonClick(e) {
+    e.preventDefault();
+    const { name } = e.target;
+    const { removeItem, checkActualValue } = this.props;
+    removeItem(name);
+    checkActualValue();
   }
 
   getTitleTable() {
@@ -25,7 +35,7 @@ class ExpensesTable extends React.Component {
     const { expenses, currency } = this.props;
     const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
-      <tr key={ expense.id }>
+      <tr key={ expense.id } name={ expense.id }>
         <td>
           { expense.description }
         </td>
@@ -55,7 +65,14 @@ class ExpensesTable extends React.Component {
         </td>
         <td>
           <button type="button">Editar</button>
-          <button type="button">Excluir</button>
+          <button
+            data-testid="delete-btn"
+            type="submit"
+            onClick={ this.onDeleteButtonClick }
+            name={ expense.id }
+          >
+            Excluir
+          </button>
         </td>
       </tr>
     ));
@@ -75,13 +92,19 @@ const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  removeItem: (id) => dispatch(delWalletItem(id)),
+});
+
 ExpensesTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
   currency: PropTypes.string.isRequired,
+  removeItem: PropTypes.func.isRequired,
+  checkActualValue: PropTypes.func.isRequired,
 };
 
 ExpensesTable.defaultProps = {
   expenses: [],
 };
 
-export default connect(mapStateToProps)(ExpensesTable);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpensesTable);
