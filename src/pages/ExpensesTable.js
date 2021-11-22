@@ -13,16 +13,23 @@ class ExpensesTable extends React.Component {
 
     this.getItemTable = this.getItemTable.bind(this);
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
+    this.onEditButtonClick = this.onEditButtonClick.bind(this);
   }
 
-  async onDeleteButtonClick(e) {
+  onDeleteButtonClick(e) {
     e.preventDefault();
     const { name } = e.target;
     const { removeItem, expenses } = this.props;
 
     const newExpenses = expenses.filter(({ id }) => id !== Number(name));
 
-    await removeItem(newExpenses);
+    removeItem(newExpenses);
+  }
+
+  onEditButtonClick(expense) {
+    const { removeItem, expenses } = this.props;
+    const newExpenses = expenses.filter((exp) => (expense.id === exp.id ? expense : exp));
+    removeItem(newExpenses);
   }
 
   getTitleTable() {
@@ -34,22 +41,11 @@ class ExpensesTable extends React.Component {
   }
 
   getItemTable() {
-    const { expenses, currency } = this.props;
+    const { expenses, currency, toggleEditMode } = this.props;
     const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
       <tr key={ expense.id }>
-        <td>
-          { expense.description }
-        </td>
-        <td>
-          { expense.tag }
-        </td>
-        <td>
-          { expense.method }
-        </td>
-        <td>
-          { expense.value }
-        </td>
+        { this.getValuesItems(expense) }
         <td>
           { (expense.currency === 'USD' ? 'Dólar Comercial'
             : expense.exchangeRates[expense.currency].name.split('/')[0]) }
@@ -66,12 +62,19 @@ class ExpensesTable extends React.Component {
             : expense.exchangeRates[currency].name.split('/')[0]) }
         </td>
         <td>
-          <button type="button" data-testid="edit-btn">
-            Editar despesa
+          <button
+            type="button"
+            data-testid="edit-btn"
+            id="edit-button"
+            onClick={ toggleEditMode }
+            name={ expense.id }
+          >
+            Editar
           </button>
           <button
             data-testid="delete-btn"
             type="submit"
+            id="delete-button"
             onClick={ this.onDeleteButtonClick }
             name={ expense.id }
           >
@@ -80,6 +83,25 @@ class ExpensesTable extends React.Component {
         </td>
       </tr>
     ));
+  }
+
+  getValuesItems(expense) {
+    return (
+      <>
+        <td>
+          { expense.description }
+        </td>
+        <td>
+          { expense.tag }
+        </td>
+        <td>
+          { expense.method }
+        </td>
+        <td>
+          { expense.value }
+        </td>
+      </>
+    );
   }
 
   render() {
@@ -96,6 +118,7 @@ class ExpensesTable extends React.Component {
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
+  expenseItemChange: state.wallet.expenseItemChange,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -105,11 +128,19 @@ const mapDispatchToProps = (dispatch) => ({
 ExpensesTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
   currency: PropTypes.string.isRequired,
+  expenseItemChange: PropTypes.shape({
+    description: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+    tag: PropTypes.string.isRequired,
+    method: PropTypes.string.isRequired,
+  }),
   removeItem: PropTypes.func.isRequired,
+  toggleEditMode: PropTypes.func.isRequired,
 };
 
 ExpensesTable.defaultProps = {
   expenses: [],
+  expenseItemChange: {},
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExpensesTable);
