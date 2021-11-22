@@ -258,7 +258,7 @@ describe('7 - Implemente a lógica para que a tabela seja alimentada pelo estado
   });
 });
 
-describe.only('8 - Crie um botão para deletar uma despesa da tabela contendo as seguintes características:', () => {
+describe('8 - Crie um botão para deletar uma despesa da tabela contendo as seguintes características:', () => {
   const initial = initialStateWithExpenses;
 
   test('O botão deve estar dentro do último item da linha da tabela e deve possuir `data-testid="delete-btn"`', () => {

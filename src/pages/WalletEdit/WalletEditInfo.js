@@ -49,7 +49,7 @@ class WalletEditInfo extends React.Component {
 
   async onButtonClick(e) {
     e.preventDefault();
-    const { expenses, checkActualValue } = this.props;
+    const { expenses } = this.props;
     await this.verifyExchangeRates();
     if (expenses.length !== 0) {
       const idList = expenses.map((expense) => expense.id);
@@ -60,7 +60,6 @@ class WalletEditInfo extends React.Component {
     } else {
       this.saveWalletItemInStore();
     }
-    await checkActualValue();
     await this.getInitialState();
   }
 
@@ -122,7 +121,6 @@ WalletEditInfo.propTypes = {
   saveWalletItem: PropTypes.func.isRequired,
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   saveCurrencies: PropTypes.func.isRequired,
-  checkActualValue: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletEditInfo);
