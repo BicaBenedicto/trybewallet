@@ -19,14 +19,14 @@ class Login extends React.Component {
     this.onButtonClick = this.onButtonClick.bind(this);
   }
 
-  onInputChange({ target }) {
+  onInputChange({ target }) { // Altera o estado pelo formulario
     const { name, value } = target;
     this.setState({
       [name]: value,
     }, this.changeButtonDisabled);
   }
 
-  onButtonClick(e) {
+  onButtonClick(e) { // Salva o e-mail no estado do redux e renderiza uma nova pagina
     e.preventDefault();
     const { history, saveEmailDispatch } = this.props;
     const { email } = this.state;
@@ -35,13 +35,13 @@ class Login extends React.Component {
     history.push('/carteira');
   }
 
-  changeButtonDisabled() {
+  changeButtonDisabled() { // Decide se o botão  de login deve ficar ativado ou desativado
     this.setState({
       hasButtonDisabled: this.checkPasswordAndEmail(),
     });
   }
 
-  checkPasswordAndEmail() {
+  checkPasswordAndEmail() { // Verifica se está dentro dos requisitos para logar
     const { email, password } = this.state;
     const MIN_CHAR_PASSWORD = 6;
     if (!email || !password) return true;

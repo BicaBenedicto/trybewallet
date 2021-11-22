@@ -2,7 +2,7 @@
 const LOGIN_EMAIL = 'LOGIN_EMAIL';
 const ADD_WALLET_ITEM = 'ADD_WALLET_ITEM';
 const ADD_CURRENCIES = 'ADD_CURRENCIES';
-const DEL_WALLET_ITEM = 'DEL_WALLET_ITEM';
+const CHANGE_WALLET_ITEM = 'CHANGE_WALLET_ITEM';
 
 export const loginEnter = (value) => (
   {
@@ -17,10 +17,10 @@ export const addWalletItem = (expense) => (
   }
 );
 
-export const delWalletItem = (id) => (
+export const changeWalletItem = (expenses) => (
   {
-    type: DEL_WALLET_ITEM,
-    id,
+    type: CHANGE_WALLET_ITEM,
+    expenses,
   }
 );
 

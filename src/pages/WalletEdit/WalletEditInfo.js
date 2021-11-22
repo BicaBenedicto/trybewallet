@@ -16,7 +16,7 @@ class WalletEditInfo extends React.Component {
     this.saveWalletItemInStore = this.saveWalletItemInStore.bind(this);
   }
 
-  async onButtonClick(e) {
+  async onButtonClick(e) { // Adiciona um novo elemento a tabela, verificando os ids ja utilizados e o cambio atualizado
     e.preventDefault();
     const { expenses, verifyExchangeRates, getInitialState,
       addStateIdNumber } = this.props;
@@ -30,7 +30,7 @@ class WalletEditInfo extends React.Component {
     getInitialState();
   }
 
-  saveWalletItemInStore() {
+  saveWalletItemInStore() { // Salve o elemento novo no store do redux.
     const { saveWalletItem, expenseActualObject } = this.props;
     saveWalletItem(expenseActualObject);
   }
@@ -61,7 +61,7 @@ class WalletEditInfo extends React.Component {
           tag={ tag }
           onInputChange={ onInputChange }
         />
-        {hasEditMode
+        {hasEditMode // Altera entre o modo de editor, para salvar ou adicionar itens novos
           ? (
             <button name={ id } type="submit" onClick={ toggleEditMode }>
               Editar despesas

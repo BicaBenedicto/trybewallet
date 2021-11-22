@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { delWalletItem } from '../actions';
+import { changeWalletItem } from '../actions';
 
 const INFO_TABLE = ['Descrição', 'Tag', 'Método de pagamento', 'Valor',
   'Moeda', 'Câmbio utilizado', 'Valor convertido', 'Moeda de conversão',
@@ -16,23 +16,23 @@ class ExpensesTable extends React.Component {
     this.onEditButtonClick = this.onEditButtonClick.bind(this);
   }
 
-  onDeleteButtonClick(e) {
+  onDeleteButtonClick(e) { // Deleta o item, pegando o id pelo name do botão na linha
     e.preventDefault();
     const { name } = e.target;
-    const { removeItem, expenses } = this.props;
+    const { changeWalletItems, expenses } = this.props;
 
     const newExpenses = expenses.filter(({ id }) => id !== Number(name));
 
-    removeItem(newExpenses);
+    changeWalletItems(newExpenses);
   }
 
-  onEditButtonClick(expense) {
-    const { removeItem, expenses } = this.props;
+  onEditButtonClick(expense) { // Edita o array dos itens, pegando o objeto inteiro e criando um novo
+    const { changeWalletItems, expenses } = this.props;
     const newExpenses = expenses.filter((exp) => (expense.id === exp.id ? expense : exp));
-    removeItem(newExpenses);
+    changeWalletItems(newExpenses);
   }
 
-  getTitleTable() {
+  getTitleTable() { // Renderiza os titulos da tabela
     return INFO_TABLE.map((item, index) => (
       <th key={ index }>
         {item}
@@ -40,7 +40,7 @@ class ExpensesTable extends React.Component {
     ));
   }
 
-  getItemTable() {
+  getItemTable() { // Renderiza os itens de uma linha, dos itens selecionados no formulario
     const { expenses, currency, toggleEditMode } = this.props;
     const DECIMAL_NUMBER = 2;
     return expenses.map((expense) => (
@@ -85,7 +85,7 @@ class ExpensesTable extends React.Component {
     ));
   }
 
-  getValuesItems(expense) {
+  getValuesItems(expense) { // Renderiza mais alguns itens da tabela
     return (
       <>
         <td>
@@ -122,7 +122,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  removeItem: (id) => dispatch(delWalletItem(id)),
+  changeWalletItems: (id) => dispatch(changeWalletItem(id)),
 });
 
 ExpensesTable.propTypes = {
@@ -134,7 +134,7 @@ ExpensesTable.propTypes = {
     tag: PropTypes.string.isRequired,
     method: PropTypes.string.isRequired,
   }),
-  removeItem: PropTypes.func.isRequired,
+  changeWalletItems: PropTypes.func.isRequired,
   toggleEditMode: PropTypes.func.isRequired,
 };
 

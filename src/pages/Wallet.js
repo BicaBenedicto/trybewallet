@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import WalletEditInfo from './WalletEdit/WalletEditInfo';
 import ExpensesTable from './ExpensesTable';
 import fetchAPI from '../fetchAPI';
-import { delWalletItem, addCurrencies } from '../actions';
+import { changeWalletItem, addCurrencies } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
@@ -35,7 +35,7 @@ class Wallet extends React.Component {
     this.addStateEditable = this.addStateEditable.bind(this);
   }
 
-  getInitialState() {
+  getInitialState() { // Seta o estado do componente para o inicial
     this.setState((prevState) => ({
       expenseActualObject: {
         ...prevState.expenseActualObject,
@@ -49,16 +49,16 @@ class Wallet extends React.Component {
     this.verifyExchangeRates();
   }
 
-  onEditButtonClick() {
+  onEditButtonClick() { // Ao clicar para editar o item, caso esteja no modo de editar, altera as informações do item.
     const { expenseActualObject } = this.state;
-    const { removeItem, expenses } = this.props;
+    const { changeWalletItems, expenses } = this.props;
     const newExpenses = expenses
       .map((exp) => (Number(exp.id !== expenseActualObject.id)
         ? exp : expenseActualObject));
-    removeItem(newExpenses);
+    changeWalletItems(newExpenses);
   }
 
-  onInputChange({ target }) {
+  onInputChange({ target }) { // Altera o estado, usando o formulario de inputs
     const { name, value } = target;
     this.setState((prevState) => ({
       expenseActualObject: {
@@ -68,7 +68,7 @@ class Wallet extends React.Component {
     }));
   }
 
-  getCurrencyTypes() {
+  getCurrencyTypes() { // Pega os cambios da API salvos no estado do Redux, e renderiza um select
     const { currencies } = this.props;
     return currencies.filter((currency) => currency !== 'USDT')
       .concat('BRL').map((currency, index) => (
@@ -77,7 +77,7 @@ class Wallet extends React.Component {
         </option>));
   }
 
-  addStateIdNumber(id) {
+  addStateIdNumber(id) { // Altera o id do estado, para a adição de novos itens.
     this.setState((prevState) => ({
       expenseActualObject: {
         ...prevState.expenseActualObject,
@@ -86,7 +86,7 @@ class Wallet extends React.Component {
     }));
   }
 
-  toggleEditMode(e) {
+  toggleEditMode(e) { // Verifica e altera o modo de edição para true e false, e ativa o salvamento.
     e.preventDefault();
     const { name } = e.target;
     this.addStateEditable(name);
@@ -104,7 +104,7 @@ class Wallet extends React.Component {
     this.verifyExchangeRates();
   }
 
-  addStateEditable(id) { // Ideia dada por Carolina Pereira, OBRIGADUUUUUUUU
+  addStateEditable(id) { // Ideia dada por Carolina Pereira, OBRIGADUUUUUUUU (Restaura os itens para ser editado no formulario)
     const { expenses } = this.props;
     const restoreExpense = expenses.find((expense) => expense.id === Number(id));
     this.setState((prevState) => ({
@@ -115,7 +115,7 @@ class Wallet extends React.Component {
     }));
   }
 
-  async verifyExchangeRates() {
+  async verifyExchangeRates() { // Verifica a API e salva os cambios do momento atual e seus valores.
     const { saveCurrencies } = this.props;
     const response = await fetchAPI();
     this.setState((prevState) => ({
@@ -128,7 +128,7 @@ class Wallet extends React.Component {
     saveCurrencies(currenciesType);
   }
 
-  renderWalletInfo() {
+  renderWalletInfo() { // Renderiza o header de inputs
     const { hasEditMode, expenseActualObject } = this.state;
 
     return (
@@ -149,7 +149,7 @@ class Wallet extends React.Component {
     const { currenctActual } = this.state;
     const DECIMAL_NUMBER = 2;
     let totalField = 0;
-    expenses.forEach((exp) => {
+    expenses.forEach((exp) => { // Calcula o valor total dos itens e renderiza
       totalField += Number(exp.value * (exp.exchangeRates[exp.currency].ask));
     });
     return (
@@ -192,7 +192,7 @@ class Wallet extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   saveCurrencies: (items) => dispatch(addCurrencies(items)),
-  removeItem: (expenses) => dispatch(delWalletItem(expenses)),
+  changeWalletItems: (expenses) => dispatch(changeWalletItem(expenses)),
 });
 
 const mapStateToProps = (state) => ({
@@ -206,7 +206,7 @@ Wallet.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   saveCurrencies: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  removeItem: PropTypes.func.isRequired,
+  changeWalletItems: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

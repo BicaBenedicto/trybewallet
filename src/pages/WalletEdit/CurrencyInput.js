@@ -9,7 +9,7 @@ class CurrencyInput extends React.Component {
     this.getCurrencyTypes = this.getCurrencyTypes.bind(this);
   }
 
-  getCurrencyTypes() {
+  getCurrencyTypes() { // Resgata os cambios para geração do select
     const { currencies } = this.props;
     return currencies.filter((currency) => currency !== 'USDT')
       .map((currency, index) => (

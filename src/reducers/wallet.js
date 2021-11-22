@@ -1,7 +1,6 @@
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
-  expenseItemChange: {},
 };
 
 const walletReducer = (state = INITIAL_STATE, action) => {
@@ -16,10 +15,10 @@ const walletReducer = (state = INITIAL_STATE, action) => {
       ...state,
       currencies: Object.keys(action.items),
     };
-  case 'DEL_WALLET_ITEM':
+  case 'CHANGE_WALLET_ITEM':
     return {
       ...state,
-      expenses: action.id,
+      expenses: action.expenses,
     };
   default:
     return state;
