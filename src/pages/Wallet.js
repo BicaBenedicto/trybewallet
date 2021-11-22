@@ -9,11 +9,9 @@ class Wallet extends React.Component {
     super();
 
     this.state = {
-      currency: 'BRL',
-      value: 0,
+      currenctActual: 'BRL',
     };
 
-    this.checkActualValue = this.checkActualValue.bind(this);
     this.getCurrencyTypes = this.getCurrencyTypes.bind(this);
   }
 
@@ -26,22 +24,14 @@ class Wallet extends React.Component {
         </option>));
   }
 
-  async checkActualValue() {
-    const { expenses } = this.props;
-    const sumValue = ((expenses.length !== 0) ? expenses
-      .map(({ value, currency, exchangeRates }) => (
-        Number(value * (exchangeRates[currency].ask))
-      )) : 0);
-
-    await this.setState({
-      value: (sumValue === 0 ? 0 : sumValue.reduce((acc, value) => acc + value)),
-    });
-  }
-
   render() {
-    const { email } = this.props;
-    const { currency, value } = this.state;
+    const { email, expenses } = this.props;
+    const { currenctActual } = this.state;
     const DECIMAL_NUMBER = 2;
+    let totalField = 0;
+    expenses.forEach(({ value, currency, exchangeRates }) => {
+      totalField += Number(value * (exchangeRates[currency].ask));
+    });
     return (
       <section>
         <header>
@@ -52,11 +42,11 @@ class Wallet extends React.Component {
             {email}
           </h3>
         </header>
-        <WalletEditInfo checkActualValue={ this.checkActualValue } />
+        <WalletEditInfo />
         <div>
           <div>
             <span>Valor:</span>
-            <span data-testid="total-field">{value.toFixed(DECIMAL_NUMBER)}</span>
+            <span data-testid="total-field">{ totalField.toFixed(DECIMAL_NUMBER) }</span>
           </div>
           <div>
             <label htmlFor="currency-convert">
@@ -64,14 +54,14 @@ class Wallet extends React.Component {
               <select
                 id="currency-convert"
                 data-testid="header-currency-field"
-                value={ currency }
+                value={ currenctActual }
               >
                 { this.getCurrencyTypes() }
               </select>
             </label>
           </div>
         </div>
-        <ExpensesTable currency={ currency } checkActualValue={ this.checkActualValue } />
+        <ExpensesTable currency={ currenctActual } />
       </section>
     );
   }

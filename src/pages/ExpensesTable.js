@@ -15,20 +15,14 @@ class ExpensesTable extends React.Component {
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
   }
 
-  componentDidMount() {
-    const { checkActualValue } = this.props;
-    checkActualValue();
-  }
-
   async onDeleteButtonClick(e) {
     e.preventDefault();
     const { name } = e.target;
-    const { removeItem, expenses, checkActualValue } = this.props;
-    console.log(expenses);
+    const { removeItem, expenses } = this.props;
+
     const newExpenses = expenses.filter(({ id }) => id !== Number(name));
-    console.log(newExpenses);
+
     await removeItem(newExpenses);
-    checkActualValue();
   }
 
   getTitleTable() {
@@ -72,7 +66,9 @@ class ExpensesTable extends React.Component {
             : expense.exchangeRates[currency].name.split('/')[0]) }
         </td>
         <td>
-          <button type="button">Editar</button>
+          <button type="button" data-testid="edit-btn">
+            Editar despesa
+          </button>
           <button
             data-testid="delete-btn"
             type="submit"
@@ -89,7 +85,9 @@ class ExpensesTable extends React.Component {
   render() {
     return (
       <table>
-        { this.getTitleTable() }
+        <tr>
+          { this.getTitleTable() }
+        </tr>
         { this.getItemTable() }
       </table>
     );
@@ -108,7 +106,6 @@ ExpensesTable.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object),
   currency: PropTypes.string.isRequired,
   removeItem: PropTypes.func.isRequired,
-  checkActualValue: PropTypes.func.isRequired,
 };
 
 ExpensesTable.defaultProps = {
