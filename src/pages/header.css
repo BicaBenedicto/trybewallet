@@ -1,0 +1,10 @@
+header.header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+header .logo-text {
+  color: white;
+  text-shadow: 1px 1px 10px black;
+}

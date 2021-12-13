@@ -43,8 +43,8 @@ class ExpensesTable extends React.Component {
   getItemTable() { // Renderiza os itens de uma linha, dos itens selecionados no formulario
     const { expenses, currency, toggleEditMode } = this.props;
     const DECIMAL_NUMBER = 2;
-    return expenses.map((expense) => (
-      <tr key={ expense.id }>
+    return expenses.map((expense, index) => (
+      <tr key={ expense.id } className={ index % 2 === 0 ? 'item-table-1' : 'item-table-2'}>
         { this.getValuesItems(expense) }
         <td>
           { (expense.currency === 'USD' ? 'Dólar Comercial'
@@ -69,7 +69,7 @@ class ExpensesTable extends React.Component {
             onClick={ toggleEditMode }
             name={ expense.id }
           >
-            Editar
+            <span className="glyphicon glyphicon-edit"></span>
           </button>
           <button
             data-testid="delete-btn"
@@ -78,7 +78,7 @@ class ExpensesTable extends React.Component {
             onClick={ this.onDeleteButtonClick }
             name={ expense.id }
           >
-            Excluir
+            <span className="glyphicon glyphicon-trash"></span>
           </button>
         </td>
       </tr>

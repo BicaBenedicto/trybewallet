@@ -1,0 +1,45 @@
+.wallet header{
+  align-items: center;
+  background-color: #f3d2c1;
+  color: #001858;
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.wallet header select {
+  border: none;
+  border-radius: 20px 20px 0 0;
+  margin: 10px;
+  padding: 5px 10px;
+}
+
+.wallet table {
+  background-color: #f3d2c1;
+  width: 100%;
+}
+
+.wallet .item-table-1 {
+  background-color: hsl(20, 68%, 95%);
+}
+
+.wallet .item-table-2 {
+  background-color: hsl(20, 68%, 90%);
+}
+
+#edit-button {
+  background-color: hsl(60, 100%, 80%);
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+}
+
+#delete-button {
+  background-color: hsl(0, 100%, 80%);
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+}

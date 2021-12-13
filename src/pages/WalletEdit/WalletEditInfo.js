@@ -7,6 +7,7 @@ import DescriptionInput from './DescriptionInput';
 import MethodInput from './MethodInput';
 import TagInput from './TagInput';
 import ValueInput from './ValueInput';
+import './WalletEditInfo.css';
 
 class WalletEditInfo extends React.Component {
   constructor() {
@@ -40,7 +41,7 @@ class WalletEditInfo extends React.Component {
       toggleEditMode, hasEditMode } = this.props;
     const { value, description, currency, method, tag, id } = expenseActualObject;
     return (
-      <form>
+      <form className={ hasEditMode ? 'edit-info edit-mode' : 'edit-info' }>
         <ValueInput
           value={ value }
           onInputChange={ onInputChange }

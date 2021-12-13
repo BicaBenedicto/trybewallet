@@ -5,6 +5,7 @@ import WalletEditInfo from './WalletEdit/WalletEditInfo';
 import ExpensesTable from './ExpensesTable';
 import fetchAPI from '../fetchAPI';
 import { changeWalletItem, addCurrencies } from '../actions';
+import './Wallet.css';
 
 class Wallet extends React.Component {
   constructor() {
@@ -153,19 +154,13 @@ class Wallet extends React.Component {
       totalField += Number(exp.value * (exp.exchangeRates[exp.currency].ask));
     });
     return (
-      <section>
+      <section className="wallet">
         <header>
-          <h1>
-            TrybeWallet
-          </h1>
           <h3 data-testid="email-field">
             {email}
           </h3>
-        </header>
-        { this.renderWalletInfo() }
-        <div>
           <div>
-            <span>Valor:</span>
+            <span>Valor: </span>
             <span data-testid="total-field">{ totalField.toFixed(DECIMAL_NUMBER) }</span>
           </div>
           <div>
@@ -180,7 +175,8 @@ class Wallet extends React.Component {
               </select>
             </label>
           </div>
-        </div>
+        </header>
+        { this.renderWalletInfo() }
         <ExpensesTable
           currency={ currenctActual }
           toggleEditMode={ this.toggleEditMode }
