@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { changeWalletItem } from '../actions';
@@ -7,7 +7,7 @@ const INFO_TABLE = ['Descrição', 'Tag', 'Método de pagamento', 'Valor',
   'Moeda', 'Câmbio utilizado', 'Valor convertido', 'Moeda de conversão',
   'Editar/Excluir'];
 
-class ExpensesTable extends React.Component {
+class ExpensesTable extends Component {
   constructor() {
     super();
 
@@ -47,15 +47,16 @@ class ExpensesTable extends React.Component {
       <tr key={ expense.id } className={ index % 2 === 0 ? 'item-table-1' : 'item-table-2'}>
         { this.getValuesItems(expense) }
         <td>
-          { (expense.currency === 'USD' ? 'Dólar Comercial'
-            : expense.exchangeRates[expense.currency].name.split('/')[0]) }
+          { (expense.exchangeRates[expense.currency].name.split('/')[0]) }
         </td>
         <td>
           { Number(expense.exchangeRates[expense.currency].ask).toFixed(DECIMAL_NUMBER) }
         </td>
         <td>
-          { Number(expense.exchangeRates[expense.currency].ask * expense.value)
-            .toFixed(DECIMAL_NUMBER) }
+          { currency === 'BRL' ? Number(expense.exchangeRates[expense.currency].ask * expense.value)
+            .toFixed(DECIMAL_NUMBER)
+          : Number(expense.exchangeRates[expense.currency].ask * expense.value / expense.exchangeRates[currency].ask)
+          .toFixed(DECIMAL_NUMBER) }
         </td>
         <td>
           { (currency === 'BRL' ? 'Real'

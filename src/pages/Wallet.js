@@ -168,8 +168,10 @@ class Wallet extends React.Component {
               Cambio:
               <select
                 id="currency-convert"
+                name="currenctActual"
                 data-testid="header-currency-field"
                 value={ currenctActual }
+                onChange={ (e) => this.setState({ currenctActual: e.target.value }) }
               >
                 { this.getCurrencyTypes() }
               </select>
