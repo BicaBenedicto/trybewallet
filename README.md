@@ -4,6 +4,9 @@
 
 O projeto é um site de cambio, utilizando uma API que informa os valores do cambio para Real, sendo possivel anotar os gastos em diversas moedas, e o valor é convertido para Real Brasileiro, ficando salvo em seu navegador e utilizando o cambio no momento atual que realizou a adição.
 
+### Demonstração
+
+![Desktop](./trybewallet-image.PNG)
 
 ### Técnologias usadas:
 
